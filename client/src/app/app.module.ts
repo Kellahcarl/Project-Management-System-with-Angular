@@ -13,6 +13,7 @@ import { AdminComponent } from './admin/admin.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UpdateProjectComponent } from './update-project/update-project.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { UpdateProjectComponent } from './update-project/update-project.componen
     AdminComponent,
     CreateProjectComponent,
     UpdateProjectComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

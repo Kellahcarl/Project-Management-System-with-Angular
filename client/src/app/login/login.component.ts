@@ -16,12 +16,10 @@ export class LoginComponent {
   constructor(private router: Router, private userService: UserApiService) {}
 
   onSubmit() {
-    // Clear any previous error messages
     this.emailError = '';
     this.passwordError = '';
     this.apiMessage = '';
 
-    // Validation logic
     if (this.userData.email.trim() === '') {
       this.emailError = 'Email is required';
       return;
@@ -32,11 +30,12 @@ export class LoginComponent {
       return;
     }
 
-    // Form data is valid, create the user object
     const userData = {
       email: this.userData.email,
       password: this.userData.password,
     };
+
+    
 
     this.userService.loginUser(userData).then(
       (data) => {
@@ -47,12 +46,8 @@ export class LoginComponent {
           this.apiMessage = data.error;
         }
 
-        // Implement the logic for redirecting to the appropriate page (admin or user)
         if ('token' in data) {
           localStorage.setItem('token', data.token);
-
-          // Example of redirecting to 'user' or 'admin' page based on response:
-          // this.router.navigate(data.info.isAdmin ? ['/admin'] : ['/user']);
         }
         this.userService.checkUserDetails().then((data) => {
           if ('info' in data) {
@@ -68,7 +63,7 @@ export class LoginComponent {
       },
       (error) => {
         console.error(error);
-        // Handle error and possibly show an error message
+        this.apiMessage = error.error;
       }
     );
   }
