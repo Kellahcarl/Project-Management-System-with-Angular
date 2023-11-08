@@ -7,13 +7,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent {
-  constructor(private router: Router) {}
+  constructor (private router: Router) {
 
-  redirectToLogin() {
-    this.router.navigate(['/login']);
   }
 
-  redirectToRegister() {
-    this.router.navigate(['/register']);
+  navigateToLogin() {
+    this.router.navigate(['login']);
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['register']);
   }
 }

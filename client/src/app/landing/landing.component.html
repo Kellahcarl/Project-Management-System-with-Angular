@@ -1,7 +1,31 @@
-<h1>Welcome to Project Management System</h1>
-<div class="button-container">
-  <button type="button" class="button btn btn-success" (click)="redirectToLogin()">Register</button>
-  <button type="button" class="button btn btn-primary" (click)="redirectToRegister()">Sign In</button>
-</div>
-
-<router-outlet></router-outlet>
+<head>
+  <title>Welcome to Project Management System</title>
+  <!-- <link rel="stylesheet" href="./css/style.css" /> -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Project Management System</h1>
+    <div class="button-container">
+      <button
+        type="button"
+        (click)="navigateToRegister()"
+        class="button btn btn-success"
+      >
+        Register
+      </button>
+      <button 
+        type="button"
+        (click)="navigateToLogin()"
+        class="button btn btn-primary"
+      >
+        Sign In
+      </button>
+    </div>
+  </div>
+</body>

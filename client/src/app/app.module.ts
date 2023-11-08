@@ -14,7 +14,6 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { UpdateProjectComponent } from './update-project/update-project.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

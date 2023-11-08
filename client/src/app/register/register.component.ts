@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserApiService } from '../services/user-api.service';
 
 @Component({
   selector: 'app-register',
@@ -19,13 +20,28 @@ export class RegisterComponent {
   confirmPasswordError: string = '';
   apiMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: UserApiService) {}
 
   onSubmit() {
-    // Add your form submission logic here, including API calls if needed
-    // You can use the userData and confirmPassword properties for form data
+    this.apiMessage = '';
+    this.apiService
+      .registerUser(this.userData)
+      .then((data) => {
+        if ('message' in data) {
 
-    // After successful registration, you can redirect to the login page
-    this.router.navigate(['/login']);
+          this.apiMessage = data.message;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 3000);
+        } else if ('error' in data) {
+
+          this.apiMessage = data.error;
+         
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        // Handle fetch error, if any
+      });
   }
 }
