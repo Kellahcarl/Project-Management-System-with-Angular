@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserApiService } from '../services/user-api.service';
 
 @Component({
   selector: 'app-login',
@@ -12,16 +13,63 @@ export class LoginComponent {
   passwordError: string = '';
   apiMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserApiService) {}
 
   onSubmit() {
-    // Add your form submission logic here, including API calls if needed
-    // You can use the userData property for form data
+    // Clear any previous error messages
+    this.emailError = '';
+    this.passwordError = '';
+    this.apiMessage = '';
 
-    // After successful login, you can redirect to the appropriate page (admin or user)
-    // Implement the logic similar to the 'redirect' function in your original code
+    // Validation logic
+    if (this.userData.email.trim() === '') {
+      this.emailError = 'Email is required';
+      return;
+    }
 
-    // Example of a redirect to 'user' page:
-    this.router.navigate(['/user']);
+    if (this.userData.password.trim() === '') {
+      this.passwordError = 'Password is required';
+      return;
+    }
+
+    // Form data is valid, create the user object
+    const userData = {
+      email: this.userData.email,
+      password: this.userData.password,
+    };
+
+    this.userService.loginUser(userData).then(
+      (data) => {
+        if ('message' in data) {
+          this.apiMessage = data.message;
+        }
+        if ('error' in data) {
+          this.apiMessage = data.error;
+        }
+
+        // Implement the logic for redirecting to the appropriate page (admin or user)
+        if ('token' in data) {
+          localStorage.setItem('token', data.token);
+
+          // Example of redirecting to 'user' or 'admin' page based on response:
+          // this.router.navigate(data.info.isAdmin ? ['/admin'] : ['/user']);
+        }
+        this.userService.checkUserDetails().then((data) => {
+          if ('info' in data) {
+            if (data.info.isAdmin === true) {
+              localStorage.setItem('user_email', data.info.email!);
+              this.router.navigate(['/admin']);
+            } else if (data.info.isAdmin === false) {
+              localStorage.setItem('user_email', data.info.email!);
+              this.router.navigate(['/user']);
+            }
+          }
+        });
+      },
+      (error) => {
+        console.error(error);
+        // Handle error and possibly show an error message
+      }
+    );
   }
 }

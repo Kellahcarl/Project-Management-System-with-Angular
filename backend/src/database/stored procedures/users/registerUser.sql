@@ -4,13 +4,14 @@ CREATE OR ALTER  PROCEDURE [dbo].[registerUser]
 	@email varchar(250),
 	@password varchar(250),	
 	@isAdmin int
+	@isDeleted int
 as
 
 set nocount on;
 
 begin
 	INSERT INTO dbo.users
-	(_id, username, email, password , isAdmin)
+	(_id, username, email, password , isAdmin , isDeleted)
 	VALUES
-	(@id,@username, @email, @password ,@isAdmin);
+	(@id,@username, @email, @password ,@isAdmin,@isDeleted);
 end;

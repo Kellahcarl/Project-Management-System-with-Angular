@@ -28,20 +28,17 @@ export class RegisterComponent {
       .registerUser(this.userData)
       .then((data) => {
         if ('message' in data) {
-
           this.apiMessage = data.message;
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 3000);
         } else if ('error' in data) {
-
           this.apiMessage = data.error;
-         
         }
       })
       .catch((error) => {
-        console.error(error);
-        // Handle fetch error, if any
+        console.log(error);
+        this.apiMessage = error.error       
       });
   }
 }

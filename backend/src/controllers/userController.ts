@@ -54,7 +54,7 @@ export const registerUser = async (req: Request, res: Response) => {
     if (error)
       return res.status(400).send({
         error:
-          "password should be atleast 8 characters long with letters symbols and uppercase",
+          "check email or password should be atleast 8 characters long with letters symbols and uppercase",
       });
 
     const newPassword = await hashPass(password);
