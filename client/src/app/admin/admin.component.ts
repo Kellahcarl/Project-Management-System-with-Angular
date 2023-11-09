@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 
 import { ProjectAPIService } from '../services/project-api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -13,7 +14,16 @@ export class AdminComponent {
   users: any[] = [];
   unassignedUsers: any[] = [];
 
-  constructor(private apiService: ProjectAPIService) {}
+  constructor(private apiService: ProjectAPIService, private router: Router) {
+    if (!this.isAuthenticated()) {
+      this.router.navigate(['login']);
+    }
+  }
+
+  isAuthenticated = (): boolean => {
+    const token = localStorage.getItem('token');
+    return !!token;
+  };
 
   ngOnInit(): void {
     this.fetchProjects();
@@ -94,7 +104,7 @@ export class AdminComponent {
       this.unassignUserFromProject(projectId);
     }
   }
-  deleteProject(project_id:string) {}
+  deleteProject(project_id: string) {}
   async unassignUserFromProject(project_id: string) {
     const token = localStorage.getItem('token');
     if (!token) {

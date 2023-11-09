@@ -17,9 +17,7 @@ export class NavbarComponent implements OnInit  {
   loggedIn = this.loggedInTrue;
 
   ngOnInit(): void {
-    if (!this.isAuthenticated()) {
-      this.router.navigate(['login']);
-    }
+   
   }
 
   isAuthenticated = (): boolean => {
