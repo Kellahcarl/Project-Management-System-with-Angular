@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+
+import { ProjectAPIService } from '../services/project-api.service';
 
 @Component({
   selector: 'app-user',
@@ -9,36 +10,35 @@ import { Router } from '@angular/router';
 export class UserComponent implements OnInit {
   projectData: any = {};
 
-  constructor(private router: Router) {}
+  constructor(private apiService: ProjectAPIService) {}
 
   ngOnInit() {
-    if (!this.isAuthenticated()) {
-      this.router.navigate(['/login']);
-    }
     this.getAssignedProject();
   }
 
-  isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    return !!token;
-  }
-
-  logoutUser() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_email');
-    this.router.navigate(['/login']);
-  }
-
   getAssignedProject() {
-    // Implement your project retrieval logic here
-    // Set the projectData based on the retrieved project details
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.apiService.getAssignedProject(token).then((data) => {
+        this.projectData = data;
+        console.log(data);
+      });
+    }
   }
 
   markInProgress() {
-    // Implement the logic to mark the project as 'In Progress'
+    if (this.projectData.project_id) {
+      this.apiService.markInProgress(this.projectData.project_id).then(() => {
+        this.getAssignedProject();
+      });
+    }
   }
 
   markComplete() {
-    // Implement the logic to mark the project as 'Complete'
+    if (this.projectData.project_id) {
+      this.apiService.markComplete(this.projectData.project_id).then(() => {
+        this.getAssignedProject();
+      });
+    }
   }
 }

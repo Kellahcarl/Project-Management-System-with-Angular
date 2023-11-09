@@ -14,6 +14,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { UpdateProjectComponent } from './update-project/update-project.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     FormsModule,
     RouterModule,
     ReactiveFormsModule,
+    IonicModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

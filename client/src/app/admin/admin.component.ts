@@ -1,41 +1,116 @@
 // admin.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { ProjectAPIService } from '../services/project-api.service';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css'],
 })
-export class AdminComponent implements OnInit {
-  // Define any necessary properties and methods here
-  // You can adapt the logic from the provided TypeScript code
+export class AdminComponent {
+  projects: any[] = [];
+  users: any[] = [];
+  unassignedUsers: any[] = [];
 
-  ngOnInit() {
-    // Implement the component initialization logic here
+  constructor(private apiService: ProjectAPIService) {}
+
+  ngOnInit(): void {
+    this.fetchProjects();
+    this.fetchUsers();
+    this.fetchUnassignedUsers();
   }
 
-  isAuthenticated(): boolean {
+  async fetchProjects() {
+    try {
+      this.projects = await this.apiService.fetchProjects();
+      console.log(this.projects);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async fetchUsers() {
     const token = localStorage.getItem('token');
-    return !!token; // This ensures that the function returns a boolean value
+    if (!token) {
+      console.error('Token not found.');
+      return;
+    }
+
+    try {
+      this.users = await this.apiService.fetchUsers(token);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  logoutUser() {
-    // Implement the logic to log out the user
+  async fetchUnassignedUsers() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found.');
+      return;
+    }
+
+    try {
+      this.unassignedUsers = await this.apiService.fetchUnassignedUsers(token);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  fetchProjects() {
-    // Implement the logic to fetch projects from the API
-    // Populate the project cards in the template
+  handleUserSelection(selectElement: HTMLSelectElement) {
+    const projectId = selectElement.getAttribute('data-id');
+    const selectedUserId = selectElement.value;
+
+    if (projectId && selectedUserId !== 'assign user') {
+      this.assignUserToProject(projectId, selectedUserId);
+    }
   }
 
-  fetchUsers() {
-    // Implement the logic to fetch users from the API
-    // Populate the user list in the template
+  async assignUserToProject(project_id: string, user_id: string) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found.');
+      return;
+    }
+
+    try {
+      const response = await this.apiService.assignUserToProject(
+        token,
+        project_id,
+        user_id
+      );
+
+      // Handle the response, update UI, or show messages as needed
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  createNewProject() {
-    // Implement the logic to navigate to the create project page
-  }
+  handleUnassign(selectElement: HTMLElement) {
+    const projectId = selectElement.getAttribute('data-id');
 
-  // Implement other methods as needed based on the provided TypeScript code
+    if (projectId) {
+      this.unassignUserFromProject(projectId);
+    }
+  }
+  deleteProject(project_id:string) {}
+  async unassignUserFromProject(project_id: string) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token not found.');
+      return;
+    }
+
+    try {
+      const response = await this.apiService.unassignUserFromProject(
+        token,
+        project_id
+      );
+
+      // Handle the response, update UI, or show messages as needed
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
