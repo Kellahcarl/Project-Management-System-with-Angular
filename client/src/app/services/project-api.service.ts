@@ -1,5 +1,5 @@
-
 import { Injectable } from '@angular/core';
+import { UserApiService } from './user-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class ProjectAPIService {
   private baseUrl = 'http://localhost:4000';
 
-  constructor() {}
+  constructor(private userApi: UserApiService) {}
 
   async getAssignedProject(token: string) {
     const response = await fetch(`${this.baseUrl}/user/check_user_details`, {
@@ -48,11 +48,30 @@ export class ProjectAPIService {
       if (!response.ok) {
         throw new Error('Failed to fetch projects.');
       }
-      // console.log(`${this.baseUrl}/project`);
 
-      return response.json();
+      const projects = await response.json();
+
+      // Fetch assigned user details for each project
+      const projectsWithUsers = await Promise.all(
+        projects.map(async (project: any) => {
+          if (project.assigned_user_id) {
+            try {
+              const userResponse = await this.userApi.getUserById(
+                project.assigned_user_id
+              );
+              project.assigned_user_name = userResponse.username;
+            } catch (userError) {
+              console.error('Error fetching user:', userError);
+            }
+          }
+          return project;
+        })
+      );
+
+      return projectsWithUsers;
     } catch (error) {
       console.error(error);
+      return [];
     }
   }
 
@@ -133,6 +152,82 @@ export class ProjectAPIService {
           'Project already in progress or user already unassigned from the project.'
         );
         throw new Error('Failed to unassign user from the project.');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async createProject(token: string, projectData: any) {
+    try {
+      const response = await fetch(`${this.baseUrl}/project`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Token: ` ${token}`,
+        },
+        body: JSON.stringify(projectData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create a project.');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async getProjectById(token: string, projectId: string) {
+    try {
+      const response = await fetch(`${this.baseUrl}/project/${projectId}`, {
+        headers: {
+          Token: ` ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch project by ID.');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async deleteProject(token: string, projectId: string) {
+    try {
+      const response = await fetch(`${this.baseUrl}/project/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+          Token: ` ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete the project.');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async fetchUnassignedUsersForProject(token: string, projectId: string) {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/user/unassigned/${projectId}`,
+        {
+          method: 'GET',
+          headers: {
+            Token: ` ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch unassigned users for the project.');
       }
 
       return response.json();

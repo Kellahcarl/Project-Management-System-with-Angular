@@ -92,6 +92,11 @@ export class AdminComponent {
       );
 
       // Handle the response, update UI, or show messages as needed
+      console.log(response); // Log the response for debugging
+      // Optionally, you can fetch projects and users again to update the UI
+      this.fetchProjects();
+      this.fetchUsers();
+      this.fetchUnassignedUsers();
     } catch (error) {
       console.error(error);
     }
@@ -104,7 +109,7 @@ export class AdminComponent {
       this.unassignUserFromProject(projectId);
     }
   }
-  deleteProject(project_id: string) {}
+
   async unassignUserFromProject(project_id: string) {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -119,8 +124,32 @@ export class AdminComponent {
       );
 
       // Handle the response, update UI, or show messages as needed
+      console.log(response); // Log the response for debugging
+      // Optionally, you can fetch projects and users again to update the UI
+      this.fetchProjects();
+      this.fetchUsers();
+      this.fetchUnassignedUsers();
     } catch (error) {
       console.error(error);
     }
+  }
+
+  deleteProject(project_id: string) {
+    // Implement the logic to delete a project
+    // This can be similar to the unassignUserFromProject method
+    // You can call the API service method for deleting a project here
+  }
+
+  createProject() {
+    // Implement the logic to navigate to the create project page
+    // You can use the Angular Router for navigation
+    // Example: this.router.navigate(['create-project']);
+  }
+
+  editProject(project_id: string) {
+    // Implement the logic to store the project_id in local storage and navigate to the edit project page
+    // You can use the Angular Router for navigation
+    // Example: localStorage.setItem('project_id', project_id);
+    //          this.router.navigate(['edit-project']);
   }
 }
