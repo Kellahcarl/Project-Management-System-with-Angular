@@ -109,17 +109,12 @@ export class ProjectAPIService {
     }
   }
 
-  async assignUserToProject(
-    token: string,
-    project_id: string,
-    user_id: string
-  ) {
+  async assignUserToProject(project_id: string, user_id: string) {
     try {
       const response = await fetch(`${this.baseUrl}/project/assign`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Token: ` ${token}`,
         },
         body: JSON.stringify({ project_id, user_id }),
       });

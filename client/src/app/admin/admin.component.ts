@@ -13,6 +13,7 @@ export class AdminComponent {
   projects: any[] = [];
   users: any[] = [];
   unassignedUsers: any[] = [];
+  user: any;
 
   constructor(private apiService: ProjectAPIService, private router: Router) {
     if (!this.isAuthenticated()) {
@@ -34,7 +35,7 @@ export class AdminComponent {
   async fetchProjects() {
     try {
       this.projects = await this.apiService.fetchProjects();
-      console.log(this.projects);
+      // console.log(this.projects);
     } catch (error) {
       console.error(error);
     }
@@ -63,14 +64,19 @@ export class AdminComponent {
 
     try {
       this.unassignedUsers = await this.apiService.fetchUnassignedUsers(token);
+      // console.log(this.unassignedUsers);
     } catch (error) {
       console.error(error);
     }
   }
 
-  handleUserSelection(selectElement: HTMLSelectElement) {
-    const projectId = selectElement.getAttribute('data-id');
-    const selectedUserId = selectElement.value;
+  handleUserSelection(event: any, project_id: any) {
+    // const projectId = selectElement.getAttribute('data-id');
+    // const selectedUserId = selectElement.value;
+    const projectId = project_id;
+    const selectedUserId = event.target.value;
+
+    console.log(event.target.value, project_id);
 
     if (projectId && selectedUserId !== 'assign user') {
       this.assignUserToProject(projectId, selectedUserId);
@@ -78,21 +84,17 @@ export class AdminComponent {
   }
 
   async assignUserToProject(project_id: string, user_id: string) {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Token not found.');
-      return;
-    }
+
 
     try {
       const response = await this.apiService.assignUserToProject(
-        token,
         project_id,
         user_id
       );
 
       // Handle the response, update UI, or show messages as needed
-      console.log(response); // Log the response for debugging
+      // console.log(response); // Log the response for debugging
+      alert(response.message);
       // Optionally, you can fetch projects and users again to update the UI
       this.fetchProjects();
       this.fetchUsers();
