@@ -32,6 +32,21 @@ export class AdminComponent {
     this.fetchUnassignedUsers();
   }
 
+  getStatusColorClass(status: string): string {
+    switch (status) {
+      case 'unassigned':
+        return 'bg-gray-300 rounded';
+      case 'assigned':
+        return 'bg-yellow-500 rounded';
+      case 'inProgress':
+        return 'bg-blue-500 rounded';
+      case 'completed':
+        return 'bg-green-500 rounded';
+      default:
+        return 'bg-gray-300 rounded';
+    }
+  }
+
   async fetchProjects() {
     try {
       this.projects = await this.apiService.fetchProjects();
@@ -76,7 +91,7 @@ export class AdminComponent {
     const projectId = project_id;
     const selectedUserId = event.target.value;
 
-    console.log(event.target.value, project_id);
+    // console.log(event.target.value, project_id);
 
     if (projectId && selectedUserId !== 'assign user') {
       this.assignUserToProject(projectId, selectedUserId);
@@ -84,8 +99,6 @@ export class AdminComponent {
   }
 
   async assignUserToProject(project_id: string, user_id: string) {
-
-
     try {
       const response = await this.apiService.assignUserToProject(
         project_id,
@@ -104,8 +117,8 @@ export class AdminComponent {
     }
   }
 
-  handleUnassign(selectElement: HTMLElement) {
-    const projectId = selectElement.getAttribute('data-id');
+  handleUnassign(project_id: string) {
+    const projectId = project_id;
 
     if (projectId) {
       this.unassignUserFromProject(projectId);
@@ -113,20 +126,16 @@ export class AdminComponent {
   }
 
   async unassignUserFromProject(project_id: string) {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Token not found.');
-      return;
-    }
-
     try {
       const response = await this.apiService.unassignUserFromProject(
-        token,
         project_id
       );
 
       // Handle the response, update UI, or show messages as needed
       console.log(response); // Log the response for debugging
+      if (response.message) {
+        alert(response.message);
+      }
       // Optionally, you can fetch projects and users again to update the UI
       this.fetchProjects();
       this.fetchUsers();
@@ -136,22 +145,20 @@ export class AdminComponent {
     }
   }
 
-  deleteProject(project_id: string) {
-    // Implement the logic to delete a project
-    // This can be similar to the unassignUserFromProject method
-    // You can call the API service method for deleting a project here
+  async deleteProject(project_id: string) {
+    try {
+      await this.apiService.deleteProject(project_id);
+      this.fetchProjects();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   createProject() {
-    // Implement the logic to navigate to the create project page
-    // You can use the Angular Router for navigation
-    // Example: this.router.navigate(['create-project']);
+    this.router.navigate(['create-project']);
   }
-
   editProject(project_id: string) {
-    // Implement the logic to store the project_id in local storage and navigate to the edit project page
-    // You can use the Angular Router for navigation
-    // Example: localStorage.setItem('project_id', project_id);
-    //          this.router.navigate(['edit-project']);
+    localStorage.setItem('project_id', project_id);
+    this.router.navigate(['edit-project']);
   }
 }

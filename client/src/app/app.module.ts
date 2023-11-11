@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UpdateProjectComponent } from './update-project/update-project.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { IonicModule } from '@ionic/angular';
+import { EditProjectComponent } from './edit-project/edit-project.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { IonicModule } from '@ionic/angular';
     CreateProjectComponent,
     UpdateProjectComponent,
     NavbarComponent,
+    EditProjectComponent,
   ],
   imports: [
     BrowserModule,

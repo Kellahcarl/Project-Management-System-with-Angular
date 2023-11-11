@@ -7,6 +7,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { UpdateProjectComponent } from './update-project/update-project.component';
 import { AdminComponent } from './admin/admin.component';
 import { LandingComponent } from './landing/landing.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'create-project', component: CreateProjectComponent },
   { path: 'update-project', component: UpdateProjectComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'edit-project', component: EditProjectComponent },
 ];
 
 @NgModule({

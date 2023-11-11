@@ -17,72 +17,72 @@
           </div>
         </div>
 
-        <div class="flex gap-2 flex-wrap items-stretch">
-          <div class="w-[22vw]" *ngFor="let project of projects">
-            <div class="bg-white shadow" [attr.data-id]="project.project_id">
-              <div class="p-2">
-                <div class="card" data-id="${project.project_id}">
-                  <div class="card-body flex flex-col items-center">
-                    <div
-                      class="card-title text-center text-lg font-normal mb-3"
+        <div class="flex gap-2 flex-wrap items-stretch ">
+          <div class="w-[22vw] shadow bg-gray-200 " *ngFor="let project of projects">
+            <div class="p-2 ">
+              <div class="card " data-id="${project.project_id}">
+                <div class="card-body flex flex-col justify-between items-center h-[40vh]">
+                  <div class="card-title text-center text-lg font-normal mb-3">
+                    <b>{{ project.project_name | uppercase }}</b>
+                  </div>
+                  <div class="card-text text-center">
+                    <span class="text-center">{{
+                      project.project_description
+                    }}</span>
+                  </div>
+                  <div class="card-text text-center">
+                    <span class="text-center">
+                      Due by:
+                      {{ project.dueDate | date : "mediumDate" }}</span
                     >
-                      <b>{{ project.project_name | uppercase }}</b>
-                    </div>
-                    <div class="card-text text-center">
-                      <span class="text-center">{{
-                        project.project_description
-                      }}</span>
-                    </div>
-                    <div class="card-text text-center">
-                      <span class="text-center">
-                        Due by:
-                        {{ project.dueDate | date : "mediumDate" }}</span
+                  </div>
+                  <div class="card-text text-center" [class]="getStatusColorClass(project.project_status)">
+                    <span class="text-center" >
+                      Status : {{ project.project_status }}
+                    </span>
+                  </div>
+
+                  <div class="flex justify-center gap-4 w-full mt-4">
+                    <ion-icon
+                      class="border-2 border-green-500 rounded-full p-2"
+                      name="create-outline"
+                      (click)="editProject(project.project_id)"
+                    ></ion-icon>
+                    <ion-icon
+                      class="border-2 border-red-500 rounded-full p-2"
+                      data-id="${project.project_id}"
+                      (click)="deleteProject(project.project_id)"
+                      name="trash-outline"
+                    ></ion-icon>
+                  </div>
+
+                  <div class="flex gap-4 w-full mt-4">
+                    <select
+                      class="form-select btn btn-info"
+                      id="select_user_${project.project_id}"
+                      aria-label="Default select example"
+                      style="flex-grow: 1"
+                      data-id="{{ project.project_id }}"
+                      (change)="handleUserSelection($event, project.project_id)"
+                    >
+                      <option selected>assign user</option>
+                      <option
+                        *ngFor="let user of unassignedUsers"
+                        [value]="user._id"
                       >
-                    </div>
-                    <div class="card-text text-center">
-                      <span class="text-center">
-                        Status : {{ project.project_status }}
-                      </span>
-                    </div>
+                        {{ user.username }}
+                      </option>
+                    </select>
 
-                    <div class="flex justify-center gap-4 w-full mt-4">
-                      <ion-icon
-                        class="border-2 border-green-500 rounded-full p-2"
-                        name="create-outline"
-                        data-id="${project.project_id}"
-                      ></ion-icon>
-                      <ion-icon
-                        class="border-2 border-red-500 rounded-full p-2"
-                        data-id="${project.project_id}"
-                        (click)="deleteProject(project.project_id)"
-                        name="trash-outline"
-                      ></ion-icon>
-                    </div>
-
-                    <div class="flex gap-4 w-full mt-4">
-                      <select
-                        class="form-select btn btn-info"
-                        id="select_user_${project.project_id}"
-                        aria-label="Default select example"
-                        style="flex-grow: 1"
-                        data-id={{project.project_id}}
-                        (change)="handleUserSelection($event,project.project_id)"
-
-                      >
-                        <option selected>assign user</option>
-                        <option *ngFor="let user of unassignedUsers" [value]= 'user._id'>{{user.username}}</option>
-                      </select>
-
-                      <button
-                        class="btn btn-warning unassign-button"
-                        id="unassignButton"
-                        data-id="${project.project_id}"
-                        style="flex-grow: 1"
-                        onclick="handleUnassign(this)"
-                      >
-                        Unassign
-                      </button>
-                    </div>
+                    <button
+                      class="btn btn-warning unassign-button"
+                      id="unassignButton"
+                      data-id="${project.project_id}"
+                      style="flex-grow: 1"
+                      (click)="handleUnassign(project.project_id)"
+                    >
+                      Unassign
+                    </button>
                   </div>
                 </div>
               </div>
@@ -98,8 +98,8 @@
           <h5 class="card-title">List of Users</h5>
           <div class="card-text userlist-content">
             <div
-              class="user-card card shadow mb-2 max-w-sm p-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-              *ngFor="let user of users let i =index"
+              class="card shadow mb-2 p-2 max-w-sm bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-700 dark:border-gray-700 dark:hover:bg-gray-700"
+              *ngFor="let user of users; let i = index"
               [attr.data-id]="user.user_id"
             >
               <h1
@@ -107,9 +107,9 @@
               >
                 {{ user.username }}
               </h1>
-              <h4 class="mb-2 tracking-tight text-gray-900 dark:text-white">
+              <p class="mb-2 tracking-tight text-gray-900 dark:text-white">
                 {{ user.email }}
-              </h4>
+              </p>
             </div>
           </div>
         </div>

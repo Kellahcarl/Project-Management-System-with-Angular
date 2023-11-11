@@ -131,13 +131,12 @@ export class ProjectAPIService {
     }
   }
 
-  async unassignUserFromProject(token: string, project_id: string) {
+  async unassignUserFromProject(project_id: string) {
     try {
       const response = await fetch(`${this.baseUrl}/project/unAssign`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Token: ` ${token}`,
         },
         body: JSON.stringify({ project_id }),
       });
@@ -191,13 +190,10 @@ export class ProjectAPIService {
       console.error(error);
     }
   }
-  async deleteProject(token: string, projectId: string) {
+  async deleteProject( projectId: string) {
     try {
       const response = await fetch(`${this.baseUrl}/project/${projectId}`, {
         method: 'DELETE',
-        headers: {
-          Token: ` ${token}`,
-        },
       });
 
       if (!response.ok) {
