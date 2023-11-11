@@ -163,13 +163,33 @@ export class ProjectAPIService {
         body: JSON.stringify(projectData),
       });
 
-
-
       if (!response.ok) {
         alert('Failed to create a project.');
         throw new Error('Failed to create a project.');
       } else {
-        alert ('Project created successfully');
+        alert('Project created successfully');
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async editProject(projectData: any) {
+    try {
+      const response = await fetch(`${this.baseUrl}/project`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(projectData),
+      });
+
+      if (!response.ok) {
+        alert('Failed to update a project.');
+        throw new Error('Failed to create a project.');
+      } else {
+        alert('Project Updated successfully');
       }
 
       return response.json();
