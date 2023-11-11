@@ -153,19 +153,23 @@ export class ProjectAPIService {
       console.error(error);
     }
   }
-  async createProject(token: string, projectData: any) {
+  async createProject(projectData: any) {
     try {
       const response = await fetch(`${this.baseUrl}/project`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Token: ` ${token}`,
         },
         body: JSON.stringify(projectData),
       });
 
+
+
       if (!response.ok) {
+        alert('Failed to create a project.');
         throw new Error('Failed to create a project.');
+      } else {
+        alert ('Project created successfully');
       }
 
       return response.json();
@@ -190,7 +194,7 @@ export class ProjectAPIService {
       console.error(error);
     }
   }
-  async deleteProject( projectId: string) {
+  async deleteProject(projectId: string) {
     try {
       const response = await fetch(`${this.baseUrl}/project/${projectId}`, {
         method: 'DELETE',

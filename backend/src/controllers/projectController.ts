@@ -15,6 +15,9 @@ export const createProject = async (req: Request, res: Response) => {
   try {
     const { project_name, project_description, dueDate } = req.body;
 
+    console.log(req.body);
+    
+
     const { error } = validateProject.validate(req.body);
 
     if (error)

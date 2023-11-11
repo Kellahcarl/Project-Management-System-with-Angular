@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { Router } from '@angular/router';
+import { ProjectAPIService } from '../services/project-api.service';
 
 @Component({
   selector: 'app-create-project',
@@ -8,46 +9,123 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-project.component.css'],
 })
 export class CreateProjectComponent implements OnInit {
-  createProjectForm: FormGroup;
+  projectData: {
+    project_name: string;
+    project_description: string;
+    dueDate: string;
+  } = {
+    project_name: '',
+    project_description: '',
+    dueDate: '',
+  };
+  MONTH_NAMES = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  showDatepicker = false;
+  datepickerValue!: string;
+  month!: number; // !: mean promis it will not be null, and it will definitely be assigned
+  year!: number;
+  no_of_days = [] as number[];
+  blankdays = [] as number[];
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.createProjectForm = this.fb.group({
-      projectName: ['', Validators.required],
-      projectDescription: [''],
-      dueDate: [''],
-    });
-  }
+  constructor(private router: Router, private apiService: ProjectAPIService) {}
 
   ngOnInit(): void {
-    // You can initialize any additional data or components here
+    this.initDate();
+    this.getNoOfDays();
+  }
+  initDate() {
+    const today = new Date();
+    this.month = today.getMonth();
+    this.year = today.getFullYear();
+    this.datepickerValue = new Date(
+      this.year,
+      this.month,
+      today.getDate()
+    ).toDateString();
   }
 
+  isToday(date: any) {
+    const today = new Date();
+    const selectedDate = new Date(this.year, this.month, date);
+    return selectedDate >= today;
+  }
+
+  getDateValue(date: any) {
+    const selectedDate = new Date(this.year, this.month, date);
+    if (selectedDate >= new Date()) {
+      this.datepickerValue = selectedDate.toDateString();
+      this.showDatepicker = false;
+    }
+  }
+
+  getNoOfDays() {
+    const daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+    let dayOfWeek = new Date(this.year, this.month).getDay();
+    let blankdaysArray = [];
+    for (let i = 1; i <= dayOfWeek; i++) {
+      blankdaysArray.push(i);
+    }
+
+    let daysArray = [];
+    for (let i = 1; i <= daysInMonth; i++) {
+      daysArray.push(i);
+    }
+
+    this.blankdays = blankdaysArray;
+    this.no_of_days = daysArray;
+  }
+
+  projectNameError: string = '';
+  projectDescriptionError: string = '';
+
+  trackByIdentity = (index: number, item: any) => item;
+
   onSubmit() {
-    if (this.createProjectForm.valid) {
-      const project_name = this.createProjectForm.get('projectName')?.value;
-      const project_description =
-        this.createProjectForm.get('projectDescription')?.value;
-      const dueDate = this.createProjectForm.get('dueDate')?.value;
+    this.projectNameError = '';
+    this.projectDescriptionError = '';
 
-      const data = {
-        project_name,
-        project_description,
-        dueDate,
-      };
+    if (this.projectData.project_name.trim() === '') {
+      this.projectNameError = 'Project Name is required';
+      return;
+    }
+    if (this.projectData.project_description.trim() === '') {
+      this.projectDescriptionError = 'Project Description is required';
+      return;
+    }
 
-      // Example: Send data to a service to create the project
-      // Replace this with your actual API endpoint
-      // projectService.createProject(data).subscribe(
-      //   (result) => {
-      //     console.log('Success Message:', result.message);
-      //     alert(result.message);
-      //     this.router.navigate(['/admin']);
-      //   },
-      //   (error) => {
-      //     console.error('Error Message:', error);
-      //     alert('An error occurred while creating the project.');
-      //   }
-      // );
+    const selectedDate = new Date(this.datepickerValue);
+    const formattedDate = `${selectedDate.getFullYear()}-${(
+      selectedDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
+
+    const projectData = {
+      project_name: this.projectData.project_name,
+      project_description: this.projectData.project_description,
+      dueDate: formattedDate,
+    };
+
+    try {
+      this.apiService.createProject(projectData);
+
+      this.router.navigate(['/admin']);
+    } catch (error) {
+      console.log(error);
     }
   }
 }
