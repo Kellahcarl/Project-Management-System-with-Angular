@@ -1,6 +1,6 @@
 // admin.component.ts
 import { Component } from '@angular/core';
-
+import Swal from 'sweetalert2';
 import { ProjectAPIService } from '../services/project-api.service';
 import { Router } from '@angular/router';
 
@@ -147,8 +147,44 @@ export class AdminComponent {
 
   async deleteProject(project_id: string) {
     try {
-      await this.apiService.deleteProject(project_id);
-      this.fetchProjects();
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn bg-red-500 text-white p-2 rounded-lg',
+          cancelButton: 'btn bg-green-500 text-white p-2 rounded-lg ',
+        },
+        buttonsStyling: false,
+      });
+      swalWithBootstrapButtons
+        .fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel   !  ',
+          reverseButtons: true,
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            await this.apiService.deleteProject(project_id);
+            await this.fetchProjects();
+
+            swalWithBootstrapButtons.fire({
+              title: 'Deleted!',
+              text: 'Your file has been deleted.',
+              icon: 'success',
+            });
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire({
+              title: 'Cancelled',
+              text: 'Your imaginary file is safe :)',
+              icon: 'error',
+            });
+          }
+        });
     } catch (error) {
       console.error(error);
     }

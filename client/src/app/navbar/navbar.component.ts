@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit  {
   loggedIn = this.loggedInTrue;
 
   ngOnInit(): void {
-   
+
   }
 
   isAuthenticated = (): boolean => {
@@ -31,6 +31,8 @@ export class NavbarComponent implements OnInit  {
     this.router.navigate(['']);
     // console.log(localStorage.getItem('token'));
   };
+
+   userEmail = localStorage.getItem('user_email');
 
   date = new Date();
 }

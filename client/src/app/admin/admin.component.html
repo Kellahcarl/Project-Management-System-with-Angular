@@ -8,7 +8,7 @@
           <h1 class="text-center text-2xl font-semibold">My Projects</h1>
           <div>
             <button
-              class="bg-green-500 text-white px-4 py-2"
+              class="bg-green-500 text-white px-4 py-2 rounded-lg"
               id="createProject"
               routerLink="/create-project"
             >
@@ -18,7 +18,7 @@
         </div>
 
         <div class="flex gap-2 flex-wrap items-stretch ">
-          <div class="w-[22vw] shadow bg-gray-200 " *ngFor="let project of projects">
+          <div class="w-[22vw] shadow bg-gray-200 rounded " *ngFor="let project of projects">
             <div class="p-2 ">
               <div class="card " data-id="${project.project_id}">
                 <div class="card-body flex flex-col justify-between items-center h-[40vh]">
@@ -36,7 +36,7 @@
                       {{ project.dueDate | date : "mediumDate" }}</span
                     >
                   </div>
-                  <div class="card-text text-center" [class]="getStatusColorClass(project.project_status)">
+                  <div class="card-text text-center rounded-full p-2" [class]="getStatusColorClass(project.project_status)">
                     <span class="text-center" >
                       Status : {{ project.project_status }}
                     </span>
@@ -58,7 +58,7 @@
 
                   <div class="flex gap-4 w-full mt-4">
                     <select
-                      class="form-select btn btn-info"
+                      class="form-select bg-gray-500 rounded-full p-2 m-2 text-center text-white"
                       id="select_user_${project.project_id}"
                       aria-label="Default select example"
                       style="flex-grow: 1"
@@ -75,7 +75,7 @@
                     </select>
 
                     <button
-                      class="btn btn-warning unassign-button"
+                      class="btn bg-blue-500 rounded-full p-2 m-2"
                       id="unassignButton"
                       data-id="${project.project_id}"
                       style="flex-grow: 1"

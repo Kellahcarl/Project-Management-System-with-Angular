@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserApiService } from './user-api.service';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
@@ -121,7 +122,14 @@ export class ProjectAPIService {
 
       if (!response.ok) {
         console.log('Failed to assign user to the project.');
-        alert('Failed to assign user to the project.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to assign user to the project!',
+          footer:
+            '<a href="#">Why do I have this issue?</a> <br> <p> user may be already assigned </p>',
+        });
+        // alert('Failed to assign user to the project.');
       } else {
         const data = await response.json();
         return data;
@@ -142,9 +150,14 @@ export class ProjectAPIService {
       });
 
       if (!response.ok) {
-        alert(
-          'Project already in progress or user already unassigned from the project.'
-        );
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Project already in progress or user already unassigned from the project!',
+        });
+        // alert(
+        //   'Project already in progress or user already unassigned from the project.'
+        // );
         throw new Error('Failed to unassign user from the project.');
       }
 
@@ -164,10 +177,24 @@ export class ProjectAPIService {
       });
 
       if (!response.ok) {
-        alert('Failed to create a project.');
+        // alert('Failed to create a project.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to create a project!',
+          footer: '<a href="#">check the input fields!</a>',
+        });
+
         throw new Error('Failed to create a project.');
       } else {
-        alert('Project created successfully');
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'project created successfully',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+        // alert('Project created successfully');
       }
 
       return response.json();
@@ -186,10 +213,28 @@ export class ProjectAPIService {
       });
 
       if (!response.ok) {
-        alert('Failed to update a project.');
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Your work has not been saved',
+          showConfirmButton: false,
+          timer: 1500,
+          footer:
+            '<a href="#">Why do I have this issue?</a> <br> <p> Please try again </p>',
+        });
+        // alert('Failed to update a project.');
         throw new Error('Failed to create a project.');
       } else {
-        alert('Project Updated successfully');
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Your work has been saved',
+          showConfirmButton: false,
+          timer: 2000,
+          footer: ' Project Updated successfully',
+        });
+
+        // alert('Project Updated successfully');
       }
 
       return response.json();
