@@ -16,6 +16,7 @@ import { UpdateProjectComponent } from './update-project/update-project.componen
 import { NavbarComponent } from './navbar/navbar.component';
 import { IonicModule } from '@ionic/angular';
 import { EditProjectComponent } from './edit-project/edit-project.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { EditProjectComponent } from './edit-project/edit-project.component';
     UpdateProjectComponent,
     NavbarComponent,
     EditProjectComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

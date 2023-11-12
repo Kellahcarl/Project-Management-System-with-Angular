@@ -8,6 +8,7 @@ import { UpdateProjectComponent } from './update-project/update-project.componen
 import { AdminComponent } from './admin/admin.component';
 import { LandingComponent } from './landing/landing.component';
 import { EditProjectComponent } from './edit-project/edit-project.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'update-project', component: UpdateProjectComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'edit-project', component: EditProjectComponent },
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
