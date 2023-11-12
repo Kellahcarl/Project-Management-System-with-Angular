@@ -10,7 +10,7 @@ export class ProjectAPIService {
 
   constructor(private userApi: UserApiService) {}
 
-  async getAssignedProject(token: string) {
+  async getUserToAssignedProject(token: string) {
     const response = await fetch(`${this.baseUrl}/user/check_user_details`, {
       method: 'GET',
       headers: {
@@ -21,7 +21,22 @@ export class ProjectAPIService {
     return response.json();
   }
 
-  async markInProgress(projectId: number) {
+  async getAssignedProject(user_id: string) {
+    const response = await fetch(
+      `${this.baseUrl}/project/getUserAssignedProjects`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({user_id}),
+      }
+    );
+
+    return response.json();
+  }
+
+  async markInProgress(projectId: string) {
     const response = await fetch(
       `${this.baseUrl}/project/inprogress/${projectId}`,
       {
@@ -32,7 +47,7 @@ export class ProjectAPIService {
     return response.json();
   }
 
-  async markComplete(projectId: number) {
+  async markComplete(projectId: string) {
     const response = await fetch(
       `${this.baseUrl}/project/complete/${projectId}`,
       {
@@ -242,13 +257,9 @@ export class ProjectAPIService {
       console.error(error);
     }
   }
-  async getProjectById(token: string, projectId: string) {
+  async getProjectById(projectId: string | null) {
     try {
-      const response = await fetch(`${this.baseUrl}/project/${projectId}`, {
-        headers: {
-          Token: ` ${token}`,
-        },
-      });
+      const response = await fetch(`${this.baseUrl}/project/${projectId}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch project by ID.');

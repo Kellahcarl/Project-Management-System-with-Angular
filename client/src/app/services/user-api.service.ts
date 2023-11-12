@@ -69,7 +69,7 @@ export class UserApiService {
       const response = await fetch(url, options);
       const data = await response.json();
 
-      console.log(`log from service: ${data}`);
+      // console.log(`log from service: ${data}`);
       return data;
     } catch (error) {
       console.error('API request error:', error);

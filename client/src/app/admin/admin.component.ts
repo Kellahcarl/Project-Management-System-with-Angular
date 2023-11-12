@@ -38,7 +38,7 @@ export class AdminComponent {
         return 'bg-gray-300 rounded';
       case 'assigned':
         return 'bg-yellow-500 rounded';
-      case 'inProgress':
+      case 'in Progress':
         return 'bg-blue-500 rounded';
       case 'completed':
         return 'bg-green-500 rounded';
@@ -105,10 +105,13 @@ export class AdminComponent {
         user_id
       );
 
-      // Handle the response, update UI, or show messages as needed
-      // console.log(response); // Log the response for debugging
-      alert(response.message);
-      // Optionally, you can fetch projects and users again to update the UI
+      // alert(response.message);
+      Swal.fire({
+        title: `${response.message}`,
+
+        icon: 'warning',
+      });
+
       this.fetchProjects();
       this.fetchUsers();
       this.fetchUnassignedUsers();
@@ -131,12 +134,16 @@ export class AdminComponent {
         project_id
       );
 
-      // Handle the response, update UI, or show messages as needed
-      console.log(response); // Log the response for debugging
+      console.log(response);
       if (response.message) {
-        alert(response.message);
+        // alert(response.message);
+        Swal.fire({
+          title: `${response.message}`,
+
+          icon: 'warning',
+        });
       }
-      // Optionally, you can fetch projects and users again to update the UI
+
       this.fetchProjects();
       this.fetchUsers();
       this.fetchUnassignedUsers();

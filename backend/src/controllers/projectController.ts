@@ -15,7 +15,7 @@ export const createProject = async (req: Request, res: Response) => {
   try {
     const { project_name, project_description, dueDate } = req.body;
 
-    console.log(req.body);
+    // console.log(req.body);
     
 
     const { error } = validateProject.validate(req.body);
@@ -214,7 +214,7 @@ export const unassignProject = async (req: Request, res: Response) => {
   try {
     const project_id = req.body.project_id;
 
-    console.log(project_id);
+    // console.log(project_id);
 
     if (!project_id)
       return res.status(400).send({ message: "project Id is required" });

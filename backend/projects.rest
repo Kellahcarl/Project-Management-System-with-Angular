@@ -11,17 +11,17 @@ Content-Type: application/json
 
 #####get all projects
 
-get http://localhost:3550/project
+get http://localhost:4000/project
 
 
 
 #####get one project by id
-get http://localhost:3550/project/c34abadd-d075-4606-acd0-5e4ef96b3f57
+get http://localhost:4000/project/c34abadd-d075-4606-acd0-5e4ef96b3f57
 
 
 #####update project
 
-put http://localhost:3550/project
+put http://localhost:4000/project
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
     
 }
 ### assign project 
-post http://localhost:3550/project/assign
+post http://localhost:4000/project/assign
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type: application/json
 }
 
 #### unassign project
-post http://localhost:3550/project/unAssign
+post http://localhost:4000/project/unAssign
 Content-Type: application/json
 
 {
@@ -51,17 +51,17 @@ Content-Type: application/json
 
 
 ##### complete project by ID
-get http://localhost:3550/project/complete/1b94f495-ece1-41fa-ab7f-8fc75a3e4fe2
+get http://localhost:4000/project/complete/1b94f495-ece1-41fa-ab7f-8fc75a3e4fe2
 
 ##### inprogress project by ID
-get http://localhost:3550/project/inprogress/1b94f495-ece1-41fa-ab7f-8fc75a3e4fe2
+get http://localhost:4000/project/inprogress/1b94f495-ece1-41fa-ab7f-8fc75a3e4fe2
 
 ##### delete project by ID
-delete http://localhost:3550/project/d54125bd-caa0-4537-91b6-b1a2e504c816
+delete http://localhost:4000/project/d54125bd-caa0-4537-91b6-b1a2e504c816
 
 #### get project assigned to one user
 
-post http://localhost:3550/project/getUserAssignedProjects
+post http://localhost:4000/project/getUserAssignedProjects
 Content-Type: application/json
 
 {

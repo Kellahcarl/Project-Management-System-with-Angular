@@ -8,6 +8,7 @@ import { ProjectAPIService } from '../services/project-api.service';
   styleUrls: ['./edit-project.component.css'],
 })
 export class EditProjectComponent {
+  project: any[] = [];
   projectData: {
     project_name: string;
     project_description: string;
@@ -45,11 +46,13 @@ export class EditProjectComponent {
   ngOnInit(): void {
     this.initDate();
     this.getNoOfDays();
+    this.fetchProject();
   }
   initDate() {
     const today = new Date();
     this.month = today.getMonth();
     this.year = today.getFullYear();
+
     this.datepickerValue = new Date(
       this.year,
       this.month,
@@ -92,6 +95,30 @@ export class EditProjectComponent {
   projectDescriptionError: string = '';
 
   trackByIdentity = (index: number, item: any) => item;
+
+  project_id: string | null = localStorage.getItem('project_id');
+  fetchProject = async () => {
+    try {
+      const project = this.apiService
+        .getProjectById(this.project_id)
+        .then((data) => {
+          this.project = data;
+
+          // Update projectData with retrieved values
+          if (this.project.length > 0) {
+            const projectDetails = this.project[0];
+            this.projectData.project_name = projectDetails.project_name;
+            this.projectData.project_description =
+              projectDetails.project_description;
+            this.projectData.dueDate = new Date(
+              projectDetails.dueDate
+            ).toDateString();
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   onSubmit() {
     this.projectNameError = '';
